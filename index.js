@@ -5,16 +5,13 @@ dotenv.config();
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-// const session = require('express-session');
-// const pgSession = require('connect-pg-simple')(session);
 const bodyParser = require('body-parser');
 const logger = require('morgan');
 const errorHandler = require('errorhandler');
 const methodOverride = require('method-override');
 const passport = require('passport');
 const db = require('./models');
-// const secrets = require('./config/secrets');
-// const routers = require('./routers');
+const routers = require('./routers');
 
 const app = express();
 app.use(cors());
@@ -26,7 +23,7 @@ app.use(methodOverride());
 app.use(cookieParser());
 app.use(passport.initialize());
 app.use(passport.session());
-// app.use(routers);
+app.use('/api/v1', routers);
 app.use(errorHandler());
 
 db.sequelize.sync({ force: false })

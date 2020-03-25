@@ -14,6 +14,7 @@ module.exports = (db, DataTypes) => {
     },
   }, {
     tableName: 'role',
+    timestamps: false,
   });
   return Role;
 };

@@ -14,6 +14,7 @@ module.exports = (db, DataTypes) => {
     },
   }, {
     tableName: 'status',
+    timestamps: false,
   });
   return Status;
 };
