@@ -1,23 +1,5 @@
 const bcrypt = require('bcrypt-nodejs');
 
-
-const instanceMethods = {
-  hasSetPasswod: () => this.password != null && this.password.lenght > 0,
-};
-
-const beforeSaveHook = (account, options, fn) => {
-  if (account.changed('password')) {
-    const { password } = account;
-    this.encryptPassword(password, (hash) => {
-      // eslint-disable-next-line no-param-reassign
-      account.password = hash;
-      fn(null, account);
-    });
-    return;
-  }
-  fn(null, account);
-};
-
 module.exports = (db, DataTypes) => {
   const Account = db.define('Account', {
     id: {
@@ -41,53 +23,18 @@ module.exports = (db, DataTypes) => {
     },
   }, {
     tableName: 'account',
-    instanceMethods,
-    classMethods: {
-      associate: () => {
-      },
-      encryptPassword: (password, cb) => {
-        if (!password) {
-          cb('', null);
-          return;
-        }
-        bcrypt.genSalt(10, (error, salt) => {
-          if (error) {
-            cb(null, error);
-            return;
-          }
-          bcrypt.hash(password, salt, null, (hErr, hash) => {
-            if (hErr) {
-              cb(null, hErr);
-              return;
-            }
-            cb(hash, null);
-          });
-        });
-      },
-      findUser: (email, password, callback) => {
-        Account.findOne({
-          where: { email },
-        })
-          .then((user) => {
-            if (user == null || user.password == null || user.password.length === 0) {
-              callback('User / Password combination is not correct', null);
-              return;
-            }
-            bcrypt.compare(password, user.password, (err, res) => {
-              if (res) callback(null, user);
-              else callback('Wrong password', null);
-            });
-          })
-          .catch((error) => {
-            callback(error, null);
-          });
-      },
-    },
+    timestamps: false,
     hooks: {
-      beforeUpdate: beforeSaveHook,
-      beforeCreate: beforeSaveHook,
+      beforeCreate: (account) => {
+        const salt = bcrypt.genSaltSync();
+        account.password = bcrypt.hashSync(account.password, salt);
+      },
     },
-
+    instanceMethods: {
+      validPassword(password) {
+        return bcrypt.compareSync(password, this.password);
+      },
+    },
   });
   return Account;
 };

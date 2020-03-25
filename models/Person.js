@@ -34,6 +34,7 @@ module.exports = (db, DataTypes) => {
     },
   }, {
     tableName: 'person',
+    timestamps: false,
     classMethods: {
       associate: (models) => {
         Person.hasOne(models.Account, {
