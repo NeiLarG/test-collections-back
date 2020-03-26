@@ -7,3 +7,8 @@ module.exports.createAccount = async (account, options) => {
   }
   return db.Account.create(account, options);
 };
+
+module.exports.setPersonToAccount = async (idPerson, idAccount, options) => {
+  options.where = { id: idAccount };
+  return db.Account.update({ idPerson }, options);
+};
