@@ -42,11 +42,6 @@ module.exports = (db, DataTypes) => {
         account.password = bcrypt.hashSync(account.password, salt);
       },
     },
-    instanceMethods: {
-      validPassword(password) {
-        return bcrypt.compareSync(password, this.password);
-      },
-    },
   });
   return Account;
 };
