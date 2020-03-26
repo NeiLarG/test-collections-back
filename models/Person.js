@@ -11,6 +11,7 @@ module.exports = (db, DataTypes) => {
       field: 'NICKNAME',
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     birthDate: {
       field: 'BIRTH_DATE',
