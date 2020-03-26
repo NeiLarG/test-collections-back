@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt-nodejs');
+const bcrypt = require('bcryptjs');
 
 module.exports = (db, DataTypes) => {
   const Account = db.define('Account', {
@@ -21,9 +21,21 @@ module.exports = (db, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    idPerson: {
+      field: 'ID_PERSON',
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
   }, {
     tableName: 'account',
     timestamps: false,
+    classMethods: {
+      associate: (models) => {
+        Account.hasOne(models.Person, {
+          foreignKey: 'ID_PERSON',
+        });
+      },
+    },
     hooks: {
       beforeCreate: (account) => {
         const salt = bcrypt.genSaltSync();

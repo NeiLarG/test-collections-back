@@ -8,7 +8,7 @@ module.exports.registration = async (req, res) => {
   const t = await sequelize.transaction();
 
   try {
-    const account = await accountRepository.createAccount({
+    let account = await accountRepository.createAccount({
       email: req.body.email,
       password: req.body.password,
     }, { transaction: t });
@@ -20,6 +20,12 @@ module.exports.registration = async (req, res) => {
       idStatus: 1,
       idRole: 1,
     }, { transaction: t });
+
+    account = await accountRepository.setPersonToAccount(
+      person.dataValues.id,
+      account.dataValues.id,
+      { transaction: t },
+    );
 
     await t.commit();
 
@@ -36,4 +42,8 @@ module.exports.registration = async (req, res) => {
     await t.rollback();
     res.status(400).json({ errors: [error] });
   }
+};
+
+module.exports.login = async (req, res) => {
+  res.status(200).json('ok');
 };
