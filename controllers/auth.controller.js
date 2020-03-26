@@ -1,4 +1,5 @@
-// const passport = require('passport');
+const passport = require('passport');
+const jwt = require('jsonwebtoken');
 
 const { sequelize } = require('../models');
 const accountRepository = require('../repositories/account.repository');
@@ -45,5 +46,19 @@ module.exports.registration = async (req, res) => {
 };
 
 module.exports.login = async (req, res) => {
-  res.status(200).json('ok');
+  await passport.authenticate('local', (err, account) => {
+    if (err) {
+      res.status(400).json({ errors: [err] });
+    }
+    if (!account) {
+      throw 'Invalid email or password';
+    } else {
+      const payload = {
+        id: account.idPerson,
+        email: account.email,
+      };
+      const token = jwt.sign(payload, process.env.JWT_SECRET);
+      res.status(200).json({ account, token });
+    }
+  })(req, res);
 };
