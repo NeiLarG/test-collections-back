@@ -13,9 +13,9 @@ const jwtOptions = {
 
 passport.use(new JwtStrategy(jwtOptions, (async (payload, done) => {
   try {
-    const account = await db.Account.findByPk(payload.id);
-    if (account) {
-      done(null, account);
+    const person = await db.Person.findByPk(payload.id);
+    if (person) {
+      done(null, person);
     } else {
       done(null, false);
     }
@@ -40,3 +40,20 @@ passport.use(new LocalStrategy({
     done(error);
   }
 })));
+
+module.exports.isAuthenticated = async (req, res, next) => {
+  try {
+    await passport.authenticate('jwt', (err, person) => {
+      if (err) {
+        res.status(400).json({ errors: [err] });
+      }
+      if (person && person.idStatus === 1) {
+        next();
+      } else {
+        throw 'Access denied';
+      }
+    })(req, res, next);
+  } catch (error) {
+    res.status(400).json({ errors: [error] });
+  }
+};
