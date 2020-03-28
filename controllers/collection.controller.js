@@ -18,12 +18,10 @@ module.exports.createCollection = async (req, res) => {
   }
 };
 
-module.exports.getCollections = async (req, res) => {
+module.exports.getCollectionsByPersonId = async (req, res) => {
   try {
-    const { idPerson, name } = req.query;
-    const result = await collectionRepository.getCollections({
-      where: { idPerson: idPerson, name: name },
-    });
+    const { idPerson } = req.query;
+    const result = await collectionRepository.getCollectionsByPersonId(idPerson);
     res.status(200).json(result);
   } catch (error) {
     res.status(400).json({ errors: [error] });

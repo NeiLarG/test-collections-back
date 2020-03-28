@@ -30,12 +30,7 @@ module.exports.createCollection = async (req, res, next) => {
   }
 };
 
-module.exports.getCollections = async (req, res, next) => {
-  await check('name')
-    .isLength({ min: 6, max: 45 })
-    .withMessage('Min length - 6, max length - 45')
-    .optional()
-    .run(req);
+module.exports.getCollectionsByPersonId = async (req, res, next) => {
   await check('idPerson')
     .exists()
     .withMessage('Id person is required')

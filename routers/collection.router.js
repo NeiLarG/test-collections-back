@@ -7,7 +7,7 @@ const { isAuthenticated } = require('../config/passport');
 const router = express.Router();
 
 router.route('/')
-  .get(isAuthenticated, validation.getCollections, controller.getCollections)
+  .get(isAuthenticated, validation.getCollectionsByPersonId, controller.getCollectionsByPersonId)
   .post(isAuthenticated, validation.createCollection, controller.createCollection);
 
 module.exports = router;
