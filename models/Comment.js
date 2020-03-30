@@ -1,11 +1,16 @@
 module.exports = (db, DataTypes) => {
-  const Like = db.define('Like', {
+  const Comment = db.define('Comment', {
     id: {
       field: 'ID',
       type: DataTypes.INTEGER,
       autoIncrement: true,
       allowNull: false,
       primaryKey: true,
+    },
+    text: {
+      field: 'TEXT',
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     idPerson: {
       field: 'ID_PERSON',
@@ -17,19 +22,24 @@ module.exports = (db, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    date: {
+      field: 'DATE',
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
   }, {
-    tableName: 'like',
+    tableName: 'comment',
     timestamps: false,
     classMethods: {
       associate: (models) => {
-        Like.belongsTo(models.Person, {
+        Comment.belongsTo(models.Person, {
           foreignKey: 'ID_PERSON',
         });
-        Like.belongsTo(models.Item, {
+        Comment.belongsTo(models.Item, {
           foreignKey: 'ID_ITEM',
         });
       },
     },
   });
-  return Like;
+  return Comment;
 };
