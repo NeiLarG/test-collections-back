@@ -1,13 +1,15 @@
 const { check, validationResult } = require('express-validator');
 
-module.exports.createItem = async (req, res, next) => {
-  await check('name')
-    .isLength({ min: 1, max: 50 })
-    .withMessage('Min length - 1, max length - 50')
-    .run(req);
-  await check('idCollection')
+module.exports.createComment = async (req, res, next) => {
+  await check('text')
     .exists()
-    .withMessage('Id collection is required')
+    .isLength({ min: 1, max: 255 })
+    .withMessage('Min length - 1, max length - 255')
+    .run(req);
+
+  await check('idItem')
+    .exists()
+    .withMessage('Id item is required')
     .run(req);
 
   const errors = validationResult(req);
@@ -18,10 +20,10 @@ module.exports.createItem = async (req, res, next) => {
   }
 };
 
-module.exports.getItemsByCollectionId = async (req, res, next) => {
-  await check('idCollection')
+module.exports.deleteComment = async (req, res, next) => {
+  await check('id')
     .exists()
-    .withMessage('Id collection is required')
+    .withMessage('Id is required')
     .run(req);
 
   const errors = validationResult(req);

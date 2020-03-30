@@ -34,7 +34,6 @@ module.exports.getCollectionsByPersonId = async (req, res, next) => {
   await check('idPerson')
     .exists()
     .withMessage('Id person is required')
-    .optional()
     .run(req);
 
   const errors = validationResult(req);

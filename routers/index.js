@@ -5,6 +5,7 @@ const imageRouter = require('./image.router');
 const collectionRouter = require('./collection.router');
 const itemRouter = require('./item.router');
 const likeRouter = require('./like.router');
+const commentRouter = require('./comment.router');
 
 const router = express.Router();
 
@@ -13,6 +14,6 @@ router.use('/image', imageRouter);
 router.use('/collection', collectionRouter);
 router.use('/item', itemRouter);
 router.use('/like', likeRouter);
-
+router.use('/comment', commentRouter);
 
 module.exports = router;

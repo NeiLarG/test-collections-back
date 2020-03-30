@@ -1,11 +1,9 @@
 const { check, validationResult } = require('express-validator');
 
 module.exports.createLike = async (req, res, next) => {
-
   await check('idItem')
     .exists()
     .withMessage('Id item is required')
-    .optional()
     .run(req);
 
   const errors = validationResult(req);
@@ -17,11 +15,9 @@ module.exports.createLike = async (req, res, next) => {
 };
 
 module.exports.deleteLike = async (req, res, next) => {
-
   await check('idItem')
     .exists()
     .withMessage('Id item is required')
-    .optional()
     .run(req);
 
   const errors = validationResult(req);

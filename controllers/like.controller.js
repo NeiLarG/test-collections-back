@@ -17,14 +17,14 @@ module.exports.createLike = async (req, res) => {
 
 module.exports.deleteLike = async (req, res) => {
   try {
-    const like = await likeRepository.deleteLike(
+    const result = await likeRepository.deleteLike(
       {
         idPerson: req.user.dataValues.id,
         idItem: req.body.idItem,
       },
     );
 
-    res.status(200).json(like);
+    res.status(200).json(result);
   } catch (error) {
     res.status(400).json({ errors: [error] });
   }
