@@ -9,12 +9,14 @@ const db = require('../models');
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: process.env.JWT_SECRET,
+  passReqToCallback: true,
 };
 
-passport.use(new JwtStrategy(jwtOptions, (async (payload, done) => {
+passport.use(new JwtStrategy(jwtOptions, (async (req, payload, done) => {
   try {
     const person = await db.Person.findByPk(payload.id);
     if (person) {
+      req.user = person;
       done(null, person);
     } else {
       done(null, false);
