@@ -1,7 +1,7 @@
-const db = require('../models');
+const Like = require('../models/Like');
 
 module.exports.createLike = async (like) => {
-  const existingLikesCount = await db.Like.count({
+  const existingLikesCount = await Like.count({
     where: {
       idPerson: like.idPerson,
       idItem: like.idItem,
@@ -10,11 +10,11 @@ module.exports.createLike = async (like) => {
   if (existingLikesCount) {
     throw 'Like is already standing';
   }
-  return db.Like.create(like);
+  return Like.create(like);
 };
 
 module.exports.deleteLike = async (like) => {
-  const existingLikesCount = await db.Like.count({
+  const existingLikesCount = await Like.count({
     where: {
       idPerson: like.idPerson,
       idItem: like.idItem,
@@ -23,5 +23,5 @@ module.exports.deleteLike = async (like) => {
   if (!existingLikesCount) {
     throw 'Like is not standing';
   }
-  return db.Like.destroy({ where: like });
+  return Like.destroy({ where: like });
 };

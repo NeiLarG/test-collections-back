@@ -1,35 +1,52 @@
-const Sequelize = require('sequelize');
-const fs = require('fs');
-const path = require('path');
-const _ = require('lodash');
+const Account = require('./Account');
+const Collection = require('./Collection');
+const Comment = require('./Comment');
+const Image = require('./Image');
+const Item = require('./Item');
+const Like = require('./Like');
+const Person = require('./Person');
+const Role = require('./Role');
+const Status = require('./Status');
+const Topic = require('./Topic');
 
-const db = {};
-
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USERNAME,
-  process.env.DB_PASSWORD,
-  {
-    host: process.env.DB_HOST,
-    dialect: process.env.DB_DIALECT,
-  },
-);
-
-fs
-  .readdirSync(__dirname)
-  .filter((file) => (file.indexOf('.') !== 0) && (file !== 'index.js'))
-  .forEach((file) => {
-    const model = sequelize.import(path.join(__dirname, file));
-    db[model.name] = model;
+module.exports.createAssociations = () => {
+  // Person <-> Collection association
+  Person.hasMany(Collection, {
+    foreignKey: 'ID',
+    targetkey: 'ID_PERSON',
+    as: 'collections',
   });
-
-Object.keys(db).forEach((modelName) => {
-  if ('associate' in db[modelName]) {
-    db[modelName].associate(db);
-  }
-});
-
-module.exports = _.extend({
-  sequelize,
-  Sequelize,
-}, db);
+  Collection.belongsTo(Person, {
+    foreignKey: 'ID_PERSON',
+    targetkey: 'ID',
+    as: 'person',
+  });
+  // Account <-> Person association
+  Account.hasOne(Person, {
+    foreignKey: 'ID_ACCOUNT',
+    targetkey: 'ID',
+    as: 'person',
+  });
+  // Like <-> Item association
+  Item.hasMany(Like, {
+    foreignKey: 'ID_ITEM',
+    targetkey: 'ID',
+    as: 'likes',
+  });
+  Like.belongsTo(Item, {
+    foreignKey: 'ID',
+    targetkey: 'ID_ITEM',
+    as: 'item',
+  });
+  // Comment <-> Item association
+  Item.hasMany(Comment, {
+    foreignKey: 'ID_ITEM',
+    targetkey: 'ID',
+    as: 'comments',
+  });
+  Comment.belongsTo(Item, {
+    foreignKey: 'ID',
+    targetkey: 'ID_ITEM',
+    as: 'item',
+  });
+};

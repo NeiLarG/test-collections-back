@@ -9,9 +9,10 @@ const logger = require('morgan');
 const errorHandler = require('errorhandler');
 const methodOverride = require('method-override');
 const passport = require('passport');
-const db = require('./models');
+const sequelize = require('./config/sequelize');
 const routers = require('./routers');
 require('./config/passport');
+require('./models').createAssociations();
 
 const app = express();
 app.set('port', process.env.PORT || 3000);
@@ -25,7 +26,7 @@ app.use(passport.initialize());
 app.use('/api/v1', routers);
 app.use(errorHandler());
 
-db.sequelize.sync({ force: false })
+sequelize.sync({ force: false })
   .then(() => {
     app.listen(app.get('port'), () => {
       console.log('Server listening on port %d in %s mode', app.get('port'), app.get('env'));

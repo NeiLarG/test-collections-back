@@ -4,7 +4,8 @@ const LocalStrategy = require('passport-local');
 const { ExtractJwt } = require('passport-jwt');
 const JwtStrategy = require('passport-jwt').Strategy;
 
-const db = require('../models');
+const Account = require('../models/Account');
+const Person = require('../models/Person');
 
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -14,7 +15,7 @@ const jwtOptions = {
 
 passport.use(new JwtStrategy(jwtOptions, (async (req, payload, done) => {
   try {
-    const person = await db.Person.findByPk(payload.id);
+    const person = await Person.findByPk(payload.id);
     if (person) {
       req.user = person;
       done(null, person);
@@ -33,7 +34,7 @@ passport.use(new LocalStrategy({
 },
 (async (email, password, done) => {
   try {
-    const account = await db.Account.findOne({ where: { email } });
+    const account = await Account.findOne({ where: { email } });
     if (!account || !bcrypt.compareSync(password, account.password)) {
       return done(null, false, { message: 'Invalid email or password' });
     }
