@@ -11,6 +11,7 @@ router.route('/all')
 
 router.route('/')
   .get(isAuthenticated, validation.getCollectionsByPersonId, controller.getCollectionsByPersonId)
-  .post(isAuthenticated, validation.createCollection, controller.createCollection);
+  .post(isAuthenticated, validation.createCollection, controller.createCollection)
+  .delete(isAuthenticated, validation.deleteCollection, controller.deleteCollection);
 
 module.exports = router;
