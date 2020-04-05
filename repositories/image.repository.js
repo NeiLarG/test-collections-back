@@ -1,3 +1,3 @@
-const db = require('../models');
+const Image = require('../models/Image');
 
-module.exports.createImage = async (image) => db.Image.create(image);
+module.exports.createImage = async (image) => Image.create(image);

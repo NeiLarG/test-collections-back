@@ -1,7 +1,7 @@
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 
-const { sequelize } = require('../models');
+const { sequelize } = require('../config/sequelize');
 const accountRepository = require('../repositories/account.repository');
 const personRepository = require('../repositories/person.repository');
 

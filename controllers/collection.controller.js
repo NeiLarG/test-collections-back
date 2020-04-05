@@ -1,4 +1,20 @@
 const collectionRepository = require('../repositories/collection.repository');
+const Person = require('../models/Person');
+
+module.exports.getAllCollections = async (req, res) => {
+  try {
+    const collections = await collectionRepository.getAllCollections({
+      include: {
+        model: Person,
+        as: 'person',
+      },
+    });
+    res.status(200).json(collections);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ errors: [error] });
+  }
+};
 
 module.exports.createCollection = async (req, res) => {
   try {

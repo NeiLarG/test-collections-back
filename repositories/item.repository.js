@@ -1,11 +1,12 @@
-const db = require('../models');
+const Item = require('../models/Item');
+const Collection = require('../models/Collection');
 
-module.exports.createItem = async (item) => db.Item.create(item);
+module.exports.createItem = async (item) => Item.create(item);
 
-module.exports.getItemsByCollectionId = async (idCollection) => {
-  const collection = await db.Collection.findByPk(idCollection);
+module.exports.getItemsByCollectionId = async (idCollection, options) => {
+  const collection = await Collection.findByPk(idCollection);
   if (!collection) {
     throw 'Collection is not founded';
   }
-  return db.Item.findAll({ where: { idCollection } });
+  return Item.findAll(options);
 };

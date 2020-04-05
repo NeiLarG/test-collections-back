@@ -1,9 +1,9 @@
-const db = require('../models');
+const Person = require('../models/Person');
 
 module.exports.createPerson = async (person, options) => {
-  const existingsNickNameCount = await db.Person.count({ where: { nickName: person.nickName } });
+  const existingsNickNameCount = await Person.count({ where: { nickName: person.nickName } });
   if (existingsNickNameCount > 0) {
     throw 'NickName already used.';
   }
-  return db.Person.create(person, options);
+  return Person.create(person, options);
 };

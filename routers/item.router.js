@@ -8,6 +8,6 @@ const router = express.Router();
 
 router.route('/')
   .post(isAuthenticated, validation.createItem, controller.createItem)
-  .get(isAuthenticated, validation.getItemsByCollectionId, controller.getItemsByCollectionId);
+  .get(validation.getItemsByCollectionId, controller.getItemsByCollectionId);
 
 module.exports = router;
