@@ -43,3 +43,17 @@ module.exports.getCollectionsByPersonId = async (req, res, next) => {
     next();
   }
 };
+
+module.exports.deleteCollection = async (req, res, next) => {
+  await check('idCollection')
+    .exists()
+    .withMessage('Id collection is required')
+    .run(req);
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    res.status(422).json({ errors: errors.array() });
+  } else {
+    next();
+  }
+};

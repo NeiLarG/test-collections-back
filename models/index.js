@@ -49,4 +49,24 @@ module.exports.createAssociations = () => {
     targetkey: 'ID_ITEM',
     as: 'item',
   });
+  // Topic <-> Collection association
+  Topic.hasOne(Collection, {
+    foreignKey: 'ID_TOPIC',
+    targetkey: 'ID',
+  });
+  Collection.belongsTo(Topic, {
+    foreignKey: 'ID_TOPIC',
+    targetkey: 'ID',
+    as: 'topic',
+  });
+  // Image <-> Collection association
+  Image.hasOne(Collection, {
+    foreignKey: 'ID_IMAGE',
+    targetkey: 'ID',
+  });
+  Collection.belongsTo(Image, {
+    foreignKey: 'ID_IMAGE',
+    targetkey: 'ID',
+    as: 'image',
+  });
 };
